@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>MyJournal</title>
+        <link href="https://fonts.googleapis.com/css?family=Cousine:400" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Work+Sans:600" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="static/css/normalize.css">
+        <link rel="stylesheet" href="static/css/site.css">
+    </head>
+    <body>
+                <header>
+            <div class="container">
+                <div class="site-header">
+                    <div class="nav">
+                        <a href="{{ url_for('index') }}">HOME</a>
+                    </div>
+                </div>
+            </div>
+        <section>
+            <div class="container block-content">
+      <div class="flash">
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="notification {{category}}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        </div>
+                {% block content %}{% endblock %}
+            </div>
+        </section>
+        <footer>
+            <div>
+                &copy; MyJournal
+            </div>
+        </footer>
+    </body>
+</html>

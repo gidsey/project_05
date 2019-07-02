@@ -56,8 +56,9 @@ def register():
     """Define the registration view."""
     form = forms.RegisterForm()
     if form.validate_on_submit():
-        flash("Registration successful.")
+        flash("Registration successful.", "success")
         models.User.create_user(
+            username=form.username.data,
             email=form.email.data,
             password=form.password.data
         )
@@ -74,15 +75,15 @@ def login():
             user = models.User.get(models.User.email == form.email.data)
         except models.DoesNotExist:
             flash("Your email or password was not recognised. "
-                  "Please try again.")
+                  "Please try again.", "error")
         else:
             if check_password_hash(user.password, form.password.data):
                 login_user(user)
-                flash("Login successful.")
+                flash("Login successful.", "success")
                 return redirect(url_for('index'))
             else:
                 flash("Your email or password was not recognised. "
-                      "Please try again.")
+                      "Please try again.", "error")
     return render_template('login.html', form=form)  # unsuccesful login
 
 
@@ -91,7 +92,7 @@ def login():
 def logout():
     """Define the logout view."""
     logout_user()
-    flash("Logout successful.")
+    flash("Logout successful.", "success")
     return redirect(url_for('index'))
 
 

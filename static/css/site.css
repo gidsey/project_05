@@ -18,6 +18,19 @@ header .site-header {
 	margin: 0 auto;
 	height: 95px;
 }
+header .nav {
+	text-align: center;
+	color: #333;
+	height: 45px;
+	margin: 20px auto 20px auto;
+	border-bottom: 1px solid #678f89;
+}
+
+.block-content {
+	display: block;
+	margin: 60px auto 80px auto;
+}
+
 header .logo i {
 	color: #678f89;
 	margin: 20px 0 0 -5px;
@@ -34,6 +47,30 @@ footer {
 	border-top: 2px dotted #678f89;
 }
 
+
+/*Notifications*/
+
+.flash {
+	display: block;
+	position: fixed;
+	right: 26px;
+}
+
+.notification {
+  text-align: center;
+  padding: 10px 20px;
+  border-radius: 4px;
+  color: #fff;
+}
+.success {
+  background: #70DA8B;
+  color: #4DA463;
+}
+.error {
+  background: #FFE6B2;
+  color: #C5A14E;
+  margin-bottom: 20px;
+}
 
 
 /* ==========================================================================

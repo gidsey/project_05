@@ -14,6 +14,28 @@
         <header>
             <div class="container">
                 <div class="site-header">
+
+                    <div class="nav">
+                    <div class="flash">
+                    <!-- Flash messages -->
+                     {% with messages = get_flashed_messages(with_categories=True) %}
+                     {% if messages %}
+                         {% for category, message in messages %}
+                        <div class="notification {{category}}">{{ message }}</div>
+                    {% endfor %}
+                    {% endif %}
+                    {% endwith %}
+                    </div>       
+                <!-- Log in/Log out -->
+                {% if current_user.is_authenticated %}
+                Welcome {{ current_user.username }}
+                <a href="{{ url_for('logout') }}">LOG OUT</a>
+                {% else %}
+                <a href="{{ url_for('login') }}">LOG IN</a> |
+                <a href="{{ url_for('register') }}">REGISTER</a>
+                {% endif %}
+                    </div>
+    
                     <a class="logo" href="index.html"><i class="material-icons">library_books</i></a>
                     <a class="button icon-right" href="new.html"><span>New Entry</span> <i class="material-icons">add</i></a>
                 </div>
