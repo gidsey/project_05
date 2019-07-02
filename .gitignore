@@ -115,3 +115,6 @@ dmypy.json
 
 # Project specific
 _notes.txt
+*.sublime-project
+*.sublime-workspace
+
