@@ -117,4 +117,5 @@ dmypy.json
 _notes.txt
 *.sublime-project
 *.sublime-workspace
+.DS_Store
 
