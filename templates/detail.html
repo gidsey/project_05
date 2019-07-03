@@ -7,15 +7,35 @@
         <link href="https://fonts.googleapis.com/css?family=Cousine:400" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Work+Sans:600" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="stylesheet" href="static/css/normalize.css">
-        <link rel="stylesheet" href="static/css/site.css">
+        <link rel="stylesheet" href="/static/css/normalize.css">
+        <link rel="stylesheet" href="/static/css/site.css">
     </head>
     <body>
-        <header>
+                <header>
             <div class="container">
                 <div class="site-header">
-                    <a class="logo" href="index.html"><i class="material-icons">library_books</i></a>
-                    <a class="button icon-right" href="new.html"><span>New Entry</span> <i class="material-icons">add</i></a>
+                    <div class="nav">
+                    <div class="flash">
+                    <!-- Flash messages -->
+                     {% with messages = get_flashed_messages(with_categories=True) %}
+                         {% if messages %}
+                             {% for category, message in messages %}
+                            <div class="notification {{category}}">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                    </div>       
+                    <!-- Log in/Log out -->
+                    {% if current_user.is_authenticated %}
+                    Welcome {{ current_user.username }}
+                    <a href="{{ url_for('logout') }}">LOG OUT</a>
+                    {% else %}
+                    <a href="{{ url_for('login') }}">LOG IN</a> |
+                    <a href="{{ url_for('register') }}">REGISTER</a>
+                    {% endif %}
+                    </div>
+                    <a class="logo" href="{{ url_for('index') }}"><i class="material-icons">library_books</i></a>
+                    <a class="button icon-right" href="{{ url_for('new') }}"><span>New Entry</span> <i class="material-icons">add</i></a>
                 </div>
             </div>
         </header>
@@ -31,7 +51,7 @@
                         </div>
                         <div class="entry">
                             <h3>What I Learned:</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut rhoncus felis, vel tincidunt neque.</p>
+                            <p>Lorem Pipsum dolor sit amet, consectetur adipiscing elit. Nunc ut rhoncus felis, vel tincidunt neque.</p>
                             <p>Cras egestas ac ipsum in posuere. Fusce suscipit, libero id malesuada placerat, orci velit semper metus, quis pulvinar sem nunc vel augue. In ornare tempor metus, sit amet congue justo porta et. Etiam pretium, sapien non fermentum consequat, <a href="">dolor augue</a> gravida lacus, non accumsan. Vestibulum ut metus eleifend, malesuada nisl at, scelerisque sapien.</p>
                         </div>
                         <div class="entry">

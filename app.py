@@ -46,7 +46,6 @@ def after_request(response):
 
 
 @app.route('/')
-@app.route('/entries')
 def index():
     """Define the index view."""
     entries = models.Entries.select().order_by(models.Entries.date.desc(),
@@ -130,13 +129,19 @@ def new():
     return render_template('new.html', form=form)
 
 
+@app.route('/entries')
 @app.route('/entries/<int:id>')
-def detail(id):
+def detail(id=None):
     """Show the detail page."""
-    entry = models.Entries.select().where(models.Entries.id == id)
-    if entry.count() == 0:
-        abort(404)  # This needs handling!
-    return render_template('detail.html', entry=entry)
+    if id:
+        entry = models.Entries.select().where(models.Entries.id == id)
+        if entry.count() == 0:
+            abort(404)  # This needs handling!
+        return render_template('detail.html', entry=entry)
+    else:
+        entries = models.Entries.select().order_by(models.Entries.date.desc(),
+                                                   models.Entries.id.desc())
+        return render_template('index.html', entries=entries)
 
 
 if __name__ == '__main__':
