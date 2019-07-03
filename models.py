@@ -37,7 +37,7 @@ class User(UserMixin, Model):
             raise ValueError("User already exists")
 
 
-class Entry(Model):
+class Entries(Model):
     """Define the Entry model."""
 
     username = ForeignKeyField(User, related_name='entries')
@@ -56,5 +56,5 @@ class Entry(Model):
 def initalize():
     """Initialize the DB."""
     DATABASE.connect()
-    DATABASE.create_tables([User, Entry], safe=True)
+    DATABASE.create_tables([User, Entries], safe=True)
     DATABASE.close()

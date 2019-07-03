@@ -48,7 +48,8 @@ def after_request(response):
 @app.route('/')
 def index():
     """Define the index view."""
-    return render_template('index.html')
+    entries = models.Entries.select().order_by(models.Entries.username)
+    return render_template('index.html', entries=entries)
 
 
 @app.route('/register', methods=('GET', 'POST'))
@@ -106,13 +107,13 @@ def new():
         print(form.date.data)
         print(form.title.data)
         print(form.timeSpent.data)
-        models.Entry.create(username=g.user._get_current_object(),
-                            title=form.title.data.strip(),
-                            date=form.date.data,
-                            timeSpent=form.timeSpent.data,
-                            whatILearned=form.whatILearned.data,
-                            ResourcesToRemember=form.ResourcesToRemember.data
-                            )
+        models.Entries.create(username=g.user._get_current_object(),
+                              title=form.title.data.strip(),
+                              date=form.date.data,
+                              timeSpent=form.timeSpent.data,
+                              whatILearned=form.whatILearned.data,
+                              ResourcesToRemember=form.ResourcesToRemember.data
+                              )
         flash("Entry created successfully!", "success")
         return redirect(url_for('index'))
     print('no')
