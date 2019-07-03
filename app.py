@@ -1,7 +1,7 @@
 """Personal Learning Journal App."""
 
 from flask import (Flask, g, render_template, redirect,
-                   url_for, flash)
+                   url_for, flash, abort)
 from flask_login import (LoginManager, login_user, current_user,
                          login_required, logout_user)
 from flask_bcrypt import check_password_hash
@@ -46,6 +46,7 @@ def after_request(response):
 
 
 @app.route('/')
+@app.route('/entries')
 def index():
     """Define the index view."""
     entries = models.Entries.select().order_by(models.Entries.date.desc(),
@@ -127,6 +128,15 @@ def new():
             flash(error, "error")
 
     return render_template('new.html', form=form)
+
+
+@app.route('/entries/<int:id>')
+def detail(id):
+    """Show the detail page."""
+    entry = models.Entries.select().where(models.Entries.id == id)
+    if entry.count() == 0:
+        abort(404)  # This needs handling!
+    return render_template('detail.html', entry=entry)
 
 
 if __name__ == '__main__':
