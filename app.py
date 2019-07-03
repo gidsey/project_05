@@ -48,7 +48,8 @@ def after_request(response):
 @app.route('/')
 def index():
     """Define the index view."""
-    entries = models.Entries.select().order_by(models.Entries.username)
+    entries = models.Entries.select().order_by(models.Entries.date.desc(),
+                                               models.Entries.id.desc())
     return render_template('index.html', entries=entries)
 
 
