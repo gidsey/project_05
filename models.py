@@ -37,8 +37,24 @@ class User(UserMixin, Model):
             raise ValueError("User already exists")
 
 
+class Entry(Model):
+    """Define the Entry model."""
+
+    username = ForeignKeyField(User, related_name='entries')
+    title = CharField(max_length=255)
+    date = DateField()
+    timeSpent = IntegerField()
+    whatILearned = TextField()
+    ResourcesToRemember = TextField()
+
+    class Meta:
+        """Define the DB."""
+
+        database = DATABASE
+
+
 def initalize():
     """Initialize the DB."""
     DATABASE.connect()
-    DATABASE.create_tables([User], safe=True)
+    DATABASE.create_tables([User, Entry], safe=True)
     DATABASE.close()

@@ -2,7 +2,8 @@
 
 # from flask_wtf import Form
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField
+from wtforms import (StringField, PasswordField, DateField,
+                     IntegerField, TextField)
 from wtforms.validators import (DataRequired, Regexp, Email, ValidationError,
                                 Length, EqualTo)
 from models import User
@@ -59,3 +60,30 @@ class LoginForm(FlaskForm):
 
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
+
+
+class EntryForm(FlaskForm):
+    """New Entry Form."""
+
+    title = StringField(
+        'Title',  # Form label
+        validators=[
+            DataRequired(message="'Title' is a required field.")])
+
+    date = DateField(
+        'Date', format="%Y-%m-%d")
+
+    timeSpent = IntegerField(
+        'Time spent',
+        validators=[DataRequired(message="Time Spent must be "
+                                         "a whole number.")])
+
+    whatILearned = TextField(
+        'What I Learned',
+        validators=[DataRequired(message="'What I Learned' "
+                                         "is a required field.")])
+
+    ResourcesToRemember = TextField(
+        'Resources to Remember',
+        validators=[DataRequired(message="'Resources to Remember' "
+                                         "is a required field.")])

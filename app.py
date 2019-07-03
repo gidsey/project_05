@@ -96,6 +96,37 @@ def logout():
     return redirect(url_for('index'))
 
 
+@app.route('/new', methods=('GET', 'POST'))
+@login_required
+def new():
+    """Define new entry view."""
+    form = forms.EntryForm()  # Instantiate the form
+    if form.validate_on_submit():  # Form has passed validation
+        print('ok')
+        print(form.date.data)
+        print(form.title.data)
+        print(form.timeSpent.data)
+        models.Entry.create(username=g.user._get_current_object(),
+                            title=form.title.data.strip(),
+                            date=form.date.data,
+                            timeSpent=form.timeSpent.data,
+                            whatILearned=form.whatILearned.data,
+                            ResourcesToRemember=form.ResourcesToRemember.data
+                            )
+        flash("Entry created successfully!", "success")
+        return redirect(url_for('index'))
+    print('no')
+    print(form.date.data)
+    print(form.title.data)
+    print(form.timeSpent.data)
+    print(form.errors)
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(error, "error")
+
+    return render_template('new.html', form=form)
+
+
 if __name__ == '__main__':
     models.initalize()
     try:
