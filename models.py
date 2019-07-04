@@ -45,7 +45,7 @@ class Entries(Model):
     date = DateField()
     timeSpent = IntegerField()
     whatILearned = TextField()
-    ResourcesToRemember = TextField()
+    resourcesToRemember = TextField()
 
     class Meta:
         """Define the DB."""

@@ -113,7 +113,7 @@ def new():
                               date=form.date.data,
                               timeSpent=form.timeSpent.data,
                               whatILearned=form.whatILearned.data,
-                              ResourcesToRemember=form.ResourcesToRemember.data
+                              resourcesToRemember=form.ResourcesToRemember.data
                               )
         flash("Entry created successfully!", "success")
         return redirect(url_for('index'))

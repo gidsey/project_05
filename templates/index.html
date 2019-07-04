@@ -50,7 +50,7 @@
                         {% for entry in entries %}
                           <article>
                             <h2><a href="{{ url_for('detail', id=entry.id) }}">{{ entry.title }}</a></h2>
-                             <time datetime={{ entry.date }}>{{ entry.date.strftime('%B %d, %Y') }}</time>
+                             <time datetime="{{ entry.date }}">{{ entry.date.strftime('%B %d, %Y') }}</time>
                              <p>by {{ entry.username }} <i>(id: {{ entry.id }})</i></p>
                            </article>
 
