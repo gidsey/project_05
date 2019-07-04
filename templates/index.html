@@ -31,7 +31,7 @@
                     <a href="{{ url_for('logout') }}">LOG OUT</a>
                     {% else %}
                     <a href="{{ url_for('login') }}">LOG IN</a> |
-                    <a href="{{ url_for('register') }}">REGISTER</a>
+                    <a href="{{ url_for('register') }}">SIGN UP</a>
                     {% endif %}
                     </div>
                     <a class="logo" href="{{ url_for('index') }}"><i class="material-icons">library_books</i></a>
@@ -57,10 +57,11 @@
                         {% endfor %}
                      {% else %}
                         <!-- No entries in DB. -->
-                        <article>
-                            <h2>No entries found :(</h2>
-                            <p>Log in or Register to create an entry.</p>
-                        </article>
+                        <div class="page-title">
+                            <h1>Journal entries</h1>
+                            <p>(none so far)</p>
+                            <p>Please <a href="{{ url_to('login') }}">login</a> or <a href="{{ url_to('register') }}">sign up</a> to create an entry</p>
+                        </div>
                     {% endif %}
                     </article>
                 </div>
