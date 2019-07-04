@@ -145,6 +145,12 @@ def detail(id=None):
         return render_template('index.html', entries=entries)
 
 
+@app.route('/entries/<int:id>/edit')
+def edit(id):
+    """Edit the entry."""
+    pass
+
+
 if __name__ == '__main__':
     models.initalize()
     try:

@@ -40,9 +40,9 @@
             </div>
         </header>
         <section>
-            <div class="container">
-                <div class="entry-list single">
-                    {% for item in entry %}
+             {% for item in entry %}
+             <div class="container">
+                <div class="entry-list single">      
                     <article>
                         <h1>{{ item.title }}</h1>
                         <time datetime="{{ item.date }}">{{ item.date.strftime('%B %d, %Y') }}</time>
@@ -69,12 +69,11 @@
                             </ul> -->
                         </div>
                     </article>
-                    {% endfor %}
                 </div>
             </div>
             <div class="edit">
-                <p><a href="edit.html">Edit Entry</a></p>
-            </div>
+                <p><a href="{{ url_for('edit', id=item.id) }}">Edit Entry</a></p>
+            </div>{% endfor %}
         </section>
         <footer>
             <div>
