@@ -7,8 +7,8 @@
         <link href="https://fonts.googleapis.com/css?family=Cousine:400" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Work+Sans:600" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="stylesheet" href="static/css/normalize.css">
-        <link rel="stylesheet" href="static/css/site.css">
+        <link rel="stylesheet" href="/static/css/normalize.css">
+        <link rel="stylesheet" href="/static/css/site.css">
     </head>
     <body>
         <header>
@@ -43,20 +43,23 @@
             <div class="container">
                 <div class="edit-entry">
                     <h2>Edit Entry</h2>
-                    <form>
+                    {% for item in entry %}
+                    <form method='POST' action=''>
+                        {{ form.hidden_tag() }}
                         <label for="title"> Title</label>
-                        <input id="title" type="text" name="title"><br>
+                        <input id="title" type="text" name="title" value="{{ item.title }}"><br>
                         <label for="date">Date</label>
-                        <input id="date" type="date" name="date"><br>
+                        <input id="date" type="date" name="date" value="{{ item.date }}"><br>
                         <label for="time-spent"> Time Spent</label>
-                        <input id="time-spent" type="text" name="timeSpent"><br>
+                        <input id="time-spent" type="text" name="timeSpent" value="{{ item.timeSpent }}"><br>
                         <label for="what-i-learned">What I Learned</label>
-                        <textarea id="what-i-learned" rows="5" name="whatILearned"></textarea>
+                        <textarea id="what-i-learned" rows="5" name="whatILearned">{{ item.whatILearned }}</textarea>
                         <label for="resources-to-remember">Resources to Remember</label>
-                        <textarea id="resources-to-remember" rows="5" name="ResourcesToRemember"></textarea>
+                        <textarea id="resources-to-remember" rows="5" name="ResourcesToRemember">{{ item.resourcesToRemember }}</textarea>
                         <input type="submit" value="Publish Entry" class="button">
                         <a href="#" class="button button-secondary">Cancel</a>
                     </form>
+                    {% endfor %}
                 </div>
             </div>
         </section>

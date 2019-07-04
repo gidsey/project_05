@@ -148,7 +148,9 @@ def detail(id=None):
 @app.route('/entries/<int:id>/edit')
 def edit(id):
     """Edit the entry."""
-    pass
+    form = forms.EditForm()
+    entry = models.Entries.select().where(models.Entries.id == id)
+    return render_template('edit.html', form=form, entry=entry)
 
 
 if __name__ == '__main__':
