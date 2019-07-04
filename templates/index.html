@@ -51,7 +51,7 @@
                           <article>
                             <h2><a href="{{ url_for('detail', id=entry.id) }}">{{ entry.title }}</a></h2>
                              <time datetime="{{ entry.date }}">{{ entry.date.strftime('%B %d, %Y') }}</time>
-                             <p>by {{ entry.username }} <i>(id: {{ entry.id }})</i></p>
+                             <p class="author">by {{ entry.username.username }}</p>
                            </article>
 
                         {% endfor %}

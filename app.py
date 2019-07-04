@@ -50,6 +50,7 @@ def index():
     """Define the index view."""
     entries = models.Entries.select().order_by(models.Entries.date.desc(),
                                                models.Entries.id.desc())
+
     return render_template('index.html', entries=entries)
 
 

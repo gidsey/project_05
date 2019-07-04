@@ -173,6 +173,12 @@ ul li a {
 	text-decoration: none;
 }
 
+.author {
+	font-style: italic;
+	color: #678f89;
+	font-size: 14px;
+	margin-top: 0;
+}
 
 
 /* ==========================================================================
