@@ -145,11 +145,26 @@ def detail(id=None):
         return render_template('index.html', entries=entries)
 
 
-@app.route('/entries/<int:id>/edit')
+@app.route('/entries/<int:id>/edit', methods=('GET', 'POST'))
 def edit(id):
     """Edit the entry."""
     form = forms.EditForm()
     entry = models.Entries.select().where(models.Entries.id == id)
+
+    if form.validate_on_submit():  # Form has passed validation
+        models.Entries.save(username=g.user._get_current_object(),
+                            title=form.title.data.strip(),
+                            date=form.date.data,
+                            timeSpent=form.timeSpent.data,
+                            whatILearned=form.whatILearned.data,
+                            resourcesToRemember=form.ResourcesToRemember.data
+                            ).where(username_id=id)
+        flash("Entry edited successfully!", "success")
+        return redirect(url_for('index'))
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(error, "error")
+
     return render_template('edit.html', form=form, entry=entry)
 
 
