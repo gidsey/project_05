@@ -152,13 +152,14 @@ def edit(id):
     entry = models.Entries.select().where(models.Entries.id == id)
 
     if form.validate_on_submit():  # Form has passed validation
-        models.Entries.save(username=g.user._get_current_object(),
-                            title=form.title.data.strip(),
-                            date=form.date.data,
-                            timeSpent=form.timeSpent.data,
-                            whatILearned=form.whatILearned.data,
-                            resourcesToRemember=form.ResourcesToRemember.data
-                            ).where(username_id=id)
+        query = models.Entries.save(username=g.user._get_current_object(),
+                                      title=form.title.data.strip(),
+                                      date=form.date.data,
+                                      timeSpent=form.timeSpent.data,
+                                      whatILearned=form.whatILearned.data,
+                                      resourcesToRemember=form.ResourcesToRemember.data
+                                      ).where(id == id)
+        query.execute()
         flash("Entry edited successfully!", "success")
         return redirect(url_for('index'))
     for field, errors in form.errors.items():
