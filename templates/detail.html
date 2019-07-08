@@ -47,6 +47,7 @@
                         <h1>{{ item.title }}</h1>
                         <time datetime="{{ item.date }}">{{ item.date.strftime('%B %d, %Y') }}</time>
                         <p class="author">by {{ item.username.username }}</p>
+                        <p class="author">slug {{ item.slug }}</p>
                         <div class="entry">
                             <h3>Time Spent: </h3>
                             <p>{{ item.timeSpent }} hour(s)</p>

@@ -6,6 +6,8 @@ from flask_login import (LoginManager, login_user, current_user,
                          login_required, logout_user)
 from flask_bcrypt import check_password_hash
 
+from slugify import slugify
+
 import models
 import forms
 
@@ -108,6 +110,7 @@ def new():
         try:
             models.Entries.create(username=g.user._get_current_object(),
                                   title=form.title.data.strip(),
+                                  slug=slugify(form.title.data),
                                   date=form.date.data,
                                   timeSpent=form.timeSpent.data,
                                   whatILearned=form.whatILearned.data,
