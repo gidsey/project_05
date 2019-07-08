@@ -105,15 +105,20 @@ def new():
     """Define new entry view."""
     form = forms.EntryForm()  # Instantiate the form
     if form.validate_on_submit():  # Form has passed validation
-        models.Entries.create(username=g.user._get_current_object(),
-                              title=form.title.data.strip(),
-                              date=form.date.data,
-                              timeSpent=form.timeSpent.data,
-                              whatILearned=form.whatILearned.data,
-                              resourcesToRemember=form.ResourcesToRemember.data
-                              )
-        flash("Entry created successfully!", "success")
-        return redirect(url_for('index'))
+        try:
+            models.Entries.create(username=g.user._get_current_object(),
+                                  title=form.title.data.strip(),
+                                  date=form.date.data,
+                                  timeSpent=form.timeSpent.data,
+                                  whatILearned=form.whatILearned.data,
+                                  resourcesToRemember=form.
+                                  ResourcesToRemember.data
+                                  )
+            flash("Entry created successfully!", "success")
+            return redirect(url_for('index'))
+        except models.IntegrityError:
+            flash("Title already exits!", "error")
+
     for field, errors in form.errors.items():
         for error in errors:
             flash(error, "error")

@@ -41,7 +41,7 @@ class Entries(Model):
     """Define the Entry model."""
 
     username = ForeignKeyField(User, related_name='entries')
-    title = CharField(max_length=255)
+    title = CharField(max_length=255, unique=True)
     date = DateField()
     timeSpent = IntegerField()
     whatILearned = TextField()
