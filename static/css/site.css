@@ -54,6 +54,9 @@ footer {
 	margin: 0 auto 60px auto;
 }
 
+.inactive {
+	color: #ccc;
+}
 /*Notifications*/
 
 .flash {

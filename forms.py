@@ -123,4 +123,3 @@ class DeleteForm(FlaskForm):
         'id',  # Form label
         validators=[
             DataRequired(message="'Title' is a required field.")])
-    

@@ -31,7 +31,7 @@
                     <a href="{{ url_for('logout') }}">LOG OUT</a>
                     {% else %}
                     <a href="{{ url_for('login') }}">LOG IN</a> |
-                    <a href="{{ url_for('register') }}">REGISTER</a>
+                    <a href="{{ url_for('register') }}">SIGN UP</a>
                     {% endif %}
                     </div>
                     <a class="logo" href="{{ url_for('index') }}"><i class="material-icons">library_books</i></a>
@@ -46,9 +46,10 @@
                     <article>
                         <h1>{{ item.title }}</h1>
                         <time datetime="{{ item.date }}">{{ item.date.strftime('%B %d, %Y') }}</time>
+                        <p class="author">by {{ item.username.username }}</p>
                         <div class="entry">
                             <h3>Time Spent: </h3>
-                            <p>{{ item.timeSpent }} hours</p>
+                            <p>{{ item.timeSpent }} hour(s)</p>
                         </div>
                         <div class="entry">
                             <h3>What I Learned:</h3>
@@ -72,7 +73,11 @@
                 </div>
             </div>
             <div class="edit">
-                <p><a href="{{ url_for('edit', id=item.id) }}">Edit Entry</a> | <a href="{{ url_for('delete', id=item.id) }}">Delete Entry</a></p>
+                    {% if current_user == item.username %}
+                    <p><a href="{{ url_for('edit', id=item.id) }}">Edit Entry</a> | <a href="{{ url_for('delete', id=item.id) }}">Delete Entry</a></p>
+                    {% else %}
+                    <p class="inactive">Edit Entry | Delete Entry</p>
+                    {% endif %}
             </div>{% endfor %}
         </section>
         <footer>

@@ -7,8 +7,8 @@
         <link href="https://fonts.googleapis.com/css?family=Cousine:400" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Work+Sans:600" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="stylesheet" href="static/css/normalize.css">
-        <link rel="stylesheet" href="static/css/site.css">
+        <link rel="stylesheet" href="/static/css/normalize.css">
+        <link rel="stylesheet" href="/static/css/site.css">
     </head>
     <body>
          <header>
@@ -31,7 +31,7 @@
                     <a href="{{ url_for('logout') }}">LOG OUT</a>
                     {% else %}
                     <a href="{{ url_for('login') }}">LOG IN</a> |
-                    <a href="{{ url_for('register') }}">REGISTER</a>
+                    <a href="{{ url_for('register') }}">SIGN UP</a>
                     {% endif %}
                     </div>
                     <a class="logo" href="{{ url_for('index') }}"><i class="material-icons">library_books</i></a>

@@ -99,7 +99,7 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/new', methods=('GET', 'POST'))
+@app.route('/entries/new', methods=('GET', 'POST'))
 @login_required
 def new():
     """Define new entry view."""
@@ -137,6 +137,7 @@ def detail(id=None):
 
 
 @app.route('/entries/<int:id>/edit', methods=('GET', 'POST'))
+@login_required
 def edit(id):
     """Edit the entry."""
     form = forms.EditForm()
@@ -161,6 +162,7 @@ def edit(id):
 
 
 @app.route('/entries/<int:id>/delete', methods=('GET', 'POST'))
+@login_required
 def delete(id):
     """Delete the entry."""
     # form = forms.DeleteForm()
