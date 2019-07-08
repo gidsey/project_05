@@ -160,6 +160,12 @@ def edit(id):
     return render_template('edit.html', form=form, entry=entry)
 
 
+@app.errorhandler(404)
+def not_found(error):
+    """Handle the 404 error view."""
+    return render_template('404.html'), 404
+
+
 if __name__ == '__main__':
     models.initalize()
     try:
