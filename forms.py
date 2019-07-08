@@ -114,3 +114,13 @@ class EditForm(FlaskForm):
         'Resources to Remember',
         validators=[DataRequired(message="'Resources to Remember' "
                                          "is a required field.")])
+
+
+class DeleteForm(FlaskForm):
+    """Delete Entry Form."""
+
+    id = IntegerField(
+        'id',  # Form label
+        validators=[
+            DataRequired(message="'Title' is a required field.")])
+    

@@ -72,7 +72,7 @@
                 </div>
             </div>
             <div class="edit">
-                <p><a href="{{ url_for('edit', id=item.id) }}">Edit Entry</a></p>
+                <p><a href="{{ url_for('edit', id=item.id) }}">Edit Entry</a> | <a href="{{ url_for('delete', id=item.id) }}">Delete Entry</a></p>
             </div>{% endfor %}
         </section>
         <footer>

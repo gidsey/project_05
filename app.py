@@ -45,7 +45,7 @@ def after_request(response):
     return response
 
 
-@app.route('/')
+@app.route('/', methods=('GET', 'POST'))
 def index():
     """Define the index view."""
     entries = models.Entries.select().order_by(models.Entries.date.desc(),
@@ -158,6 +158,23 @@ def edit(id):
             flash(error, "error")
 
     return render_template('edit.html', form=form, entry=entry)
+
+
+@app.route('/entries/<int:id>/delete', methods=('GET', 'POST'))
+def delete(id):
+    """Delete the entry."""
+    # form = forms.DeleteForm()
+    # entry = models.Entries.select().where(models.Entries.id == id)
+    # render_template('delete.html', id=id, form=form, entry=entry)
+
+    try:
+        record = models.Entries.get(models.Entries.id == id)
+        record.delete_instance()
+        flash("Entry deleted successfully!", "success")
+    except models.DoesNotExist:
+        abort(404)
+
+    return redirect(url_for('index'))
 
 
 @app.errorhandler(404)

@@ -7,8 +7,8 @@
         <link href="https://fonts.googleapis.com/css?family=Cousine:400" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Work+Sans:600" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="stylesheet" href="static/css/normalize.css">
-        <link rel="stylesheet" href="static/css/site.css">
+        <link rel="stylesheet" href="/static/css/normalize.css">
+        <link rel="stylesheet" href="/static/css/site.css">
     </head>
     <body>
         <header>
@@ -41,33 +41,17 @@
         </header>
         <section>
             <div class="container">
-                <div class="entry-list">
-                    {% if entries.count() %}
-                        <div class="page-title">
-                            <h1>Journal entries</h1>
-                            <p>({{ entries.count() }} in total)</p>
-                        </div>
-                        {% for entry in entries %}
-                          <article>
-                            <h2><a href="{{ url_for('detail', id=entry.id) }}">{{ entry.title }}</a></h2>
-                             <time datetime="{{ entry.date }}">{{ entry.date.strftime('%B %d, %Y') }}</time>
-                             <p class="author">by {{ entry.username.username }}</p>
-                           </article>
-
-                        {% endfor %}
-                     {% else %}
-                        <!-- No entries in DB. -->
-                        <div class="page-title">
-                            <h1>Journal entries</h1>
-                            <p>(none so far)</p>
-                            {% if current_user.is_authenticated %}
-                            <p>Click <a href="{{ url_for('new') }}">here</a> to create a new entry</p>
-                            {% else %}
-                            <p>Please <a href="{{ url_for('login') }}">login</a> or <a href="{{ url_for('register') }}">sign up</a> to create an entry.</p>
-                            {% endif %}
-                        </div>
-                    {% endif %}
-                    </article>
+                <div class="edit-entry">
+                    <h2>Delete Entry</h2>
+                    {% for item in entry %}
+                    <form method='POST' action=''>
+                        {{ form.hidden_tag() }}
+                        <input type="hidden" name="id" value="{{ item.id }}"><br>
+                        <p>Confirm delete entry '{{ item.title }}' posted on {{ item.date.strftime('%B %d, %Y') }}?</p><br>
+                         <input type="submit" value="Delete" class="button">
+                        <a href="{{ url_for('detail', id=item.id) }}" class="button button-secondary">Cancel</a>
+                    {% endfor %}
+                    </form>
                 </div>
             </div>
         </section>
