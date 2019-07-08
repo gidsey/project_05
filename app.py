@@ -105,10 +105,6 @@ def new():
     """Define new entry view."""
     form = forms.EntryForm()  # Instantiate the form
     if form.validate_on_submit():  # Form has passed validation
-        print('ok')
-        print(form.date.data)
-        print(form.title.data)
-        print(form.timeSpent.data)
         models.Entries.create(username=g.user._get_current_object(),
                               title=form.title.data.strip(),
                               date=form.date.data,
@@ -118,11 +114,6 @@ def new():
                               )
         flash("Entry created successfully!", "success")
         return redirect(url_for('index'))
-    print('no')
-    print(form.date.data)
-    print(form.title.data)
-    print(form.timeSpent.data)
-    print(form.errors)
     for field, errors in form.errors.items():
         for error in errors:
             flash(error, "error")
@@ -152,14 +143,14 @@ def edit(id):
     entry = models.Entries.select().where(models.Entries.id == id)
 
     if form.validate_on_submit():  # Form has passed validation
-        query = models.Entries.save(username=g.user._get_current_object(),
-                                      title=form.title.data.strip(),
-                                      date=form.date.data,
-                                      timeSpent=form.timeSpent.data,
-                                      whatILearned=form.whatILearned.data,
-                                      resourcesToRemember=form.ResourcesToRemember.data
-                                      ).where(id == id)
-        query.execute()
+        record = models.Entries.get(models.Entries.id == id)
+        record.title = form.title.data.strip()
+        record.date = form.date.data
+        record.timeSpent = form.timeSpent.data
+        record.whatILearned = form.whatILearned.data
+        record.resourcesToRemember = form.ResourcesToRemember.data
+        record.save()
+
         flash("Entry edited successfully!", "success")
         return redirect(url_for('index'))
     for field, errors in form.errors.items():
