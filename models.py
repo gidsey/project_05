@@ -54,8 +54,20 @@ class Entries(Model):
         database = DATABASE
 
 
+class Tag(Model):
+    """Define the Tag Model."""
+
+    tag = CharField(max_length=255, unique=True)
+    relationship = ForeignKeyField(Entries, related_name='tags')
+
+    class Meta:
+        """Define the DB (and set the indexes?)."""
+
+        database = DATABASE
+
+
 def initalize():
     """Initialize the DB."""
     DATABASE.connect()
-    DATABASE.create_tables([User, Entries], safe=True)
+    DATABASE.create_tables([User, Entries, Tag], safe=True)
     DATABASE.close()
