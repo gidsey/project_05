@@ -131,7 +131,7 @@ def new():
 
 @app.route('/entries/<slug>')
 def detail(slug):
-    """Show the detail page."""
+    """Show the detail page via slug."""
     entry = models.Entries.select().where(models.Entries.slug == slug)
     if entry.count() == 0:
         abort(404)  # This needs handling!
@@ -141,7 +141,7 @@ def detail(slug):
 @app.route('/entries')
 @app.route('/entries/<int:id>')
 def detail_id(id=None):
-    """Show the detail page."""
+    """Show the detail page via id."""
     if id:
         entry = models.Entries.select().where(models.Entries.id == id)
         if entry.count() == 0:
@@ -163,6 +163,7 @@ def edit(id):
     if form.validate_on_submit():  # Form has passed validation
         record = models.Entries.get(models.Entries.id == id)
         record.title = form.title.data.strip()
+        record.slug = slugify(form.title.data)
         record.date = form.date.data
         record.timeSpent = form.timeSpent.data
         record.whatILearned = form.whatILearned.data
