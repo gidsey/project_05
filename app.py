@@ -183,14 +183,17 @@ def edit(id):
 @login_required
 def delete(id):
     """Delete the entry."""
-    # form = forms.DeleteForm()
-    # entry = models.Entries.select().where(models.Entries.id == id)
-    # render_template('delete.html', id=id, form=form, entry=entry)
-
     try:
         record = models.Entries.get(models.Entries.id == id)
-        record.delete_instance()
-        flash("Entry deleted successfully!", "success")
+        user = g.user._get_current_object()
+        author = record.username
+        print('user: {}'.format(user))
+        print('author: {}'.format(author))
+        if user == author:
+            record.delete_instance()
+            flash("Entry deleted successfully!", "success")
+        else:
+            flash("Entry can only be deleted by its author", "error")
     except models.DoesNotExist:
         abort(404)
 

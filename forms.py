@@ -116,10 +116,10 @@ class EditForm(FlaskForm):
                                          "is a required field.")])
 
 
-class DeleteForm(FlaskForm):
-    """Delete Entry Form."""
+# class DeleteForm(FlaskForm):
+#     """Delete Entry Form."""
 
-    id = IntegerField(
-        'id',  # Form label
-        validators=[
-            DataRequired(message="'Title' is a required field.")])
+#     id = IntegerField(
+#         'id',  # Form label
+#         validators=[
+#             DataRequired(message="'Title' is a required field.")])
