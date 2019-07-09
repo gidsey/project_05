@@ -88,6 +88,8 @@ class EntryForm(FlaskForm):
         validators=[DataRequired(message="'Resources to Remember' "
                                          "is a required field.")])
 
+    tags = TextField('tags')
+
 
 class EditForm(FlaskForm):
     """Edit Entry Form."""

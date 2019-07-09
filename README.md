@@ -10,6 +10,6 @@ This project has been built using a Pyton Virtualenv and the dependencies for th
 
 
 ### Testing credentials
-* username: admin
-* email: admin@admin.com
-* password: password
+* Username: admin
+* Email: admin@admin.com
+* Password: password

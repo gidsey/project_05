@@ -57,8 +57,10 @@ class Entries(Model):
 class Tag(Model):
     """Define the Tag Model."""
 
-    tag = CharField(max_length=255, unique=True)
-    relationship = ForeignKeyField(Entries, related_name='tags')
+    # Typically a foreign key will contain the primary key
+    # of the model it relates to.
+    entry = ForeignKeyField(Entries, related_name='tags')
+    tag = CharField(max_length=255)
 
     class Meta:
         """Define the DB (and set the indexes?)."""

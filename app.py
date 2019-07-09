@@ -108,6 +108,8 @@ def new():
     form = forms.EntryForm()  # Instantiate the form
     if form.validate_on_submit():  # Form has passed validation
         try:
+            print('tags: {}'.format(form.tags.data))
+            print('tags: {}'.format(tagger(form.tags.data)))
             models.Entries.create(username=g.user._get_current_object(),
                                   title=form.title.data.strip(),
                                   slug=slugify(form.title.data),
@@ -115,8 +117,8 @@ def new():
                                   timeSpent=form.timeSpent.data,
                                   whatILearned=form.whatILearned.data,
                                   resourcesToRemember=form.
-                                  ResourcesToRemember.data
-                                  )
+                                  ResourcesToRemember.data)
+            add_tags(form.tags.data)
             flash("Entry created successfully!", "success")
             return redirect(url_for('index'))
         except models.IntegrityError:
@@ -127,6 +129,18 @@ def new():
             flash(error, "error")
 
     return render_template('new.html', form=form)
+
+
+def add_tags(tagdata):
+    """Add the tags."""
+    tags = tagger(tagdata)
+    for tag in tags:
+        print(tag)
+        try:
+            models.Tag.create(
+                tag=tag)
+        except models.IntegrityError:
+            pass
 
 
 @app.route('/entries/<slug>')
@@ -207,6 +221,13 @@ def delete(id):
 def not_found(error):
     """Handle the 404 error view."""
     return render_template('404.html'), 404
+
+
+def tagger(taglist):
+    """Return list from comma sepatared string."""
+    tags = taglist.replace(' ', '')
+    tags = set(tags.split(','))
+    return tags
 
 
 if __name__ == '__main__':
