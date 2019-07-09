@@ -224,10 +224,9 @@ def not_found(error):
 
 
 def tagger(taglist):
-    """Return list from comma sepatared string."""
+    """Return set from comma sepatared string, with duplicates removed."""
     tags = taglist.replace(' ', '')
-    tags = set(tags.split(','))
-    return tags
+    return set(tags.split(','))
 
 
 if __name__ == '__main__':
