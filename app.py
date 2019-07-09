@@ -120,7 +120,7 @@ def new():
             flash("Entry created successfully!", "success")
             return redirect(url_for('index'))
         except models.IntegrityError:
-            flash("Title already exits!", "error")
+            flash("Title already exits. Please choose another.", "error")
 
     for field, errors in form.errors.items():
         for error in errors:
@@ -138,6 +138,7 @@ def detail(slug):
     return render_template('detail.html', entry=entry)
 
 
+@app.route('/entries/')
 @app.route('/entries')
 @app.route('/entries/<int:id>')
 def detail_id(id=None):
@@ -161,17 +162,19 @@ def edit(id):
     entry = models.Entries.select().where(models.Entries.id == id)
 
     if form.validate_on_submit():  # Form has passed validation
-        record = models.Entries.get(models.Entries.id == id)
-        record.title = form.title.data.strip()
-        record.slug = slugify(form.title.data)
-        record.date = form.date.data
-        record.timeSpent = form.timeSpent.data
-        record.whatILearned = form.whatILearned.data
-        record.resourcesToRemember = form.ResourcesToRemember.data
-        record.save()
-
-        flash("Entry edited successfully!", "success")
-        return redirect(url_for('index'))
+        try:
+            record = models.Entries.get(models.Entries.id == id)
+            record.title = form.title.data.strip()
+            record.slug = slugify(form.title.data)
+            record.date = form.date.data
+            record.timeSpent = form.timeSpent.data
+            record.whatILearned = form.whatILearned.data
+            record.resourcesToRemember = form.ResourcesToRemember.data
+            record.save()
+            flash("Entry edited successfully!", "success")
+            return redirect(url_for('index'))
+        except models.IntegrityError:
+            flash("Title already exits. Please choose another.", "error")
     for field, errors in form.errors.items():
         for error in errors:
             flash(error, "error")
