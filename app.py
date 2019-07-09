@@ -129,9 +129,18 @@ def new():
     return render_template('new.html', form=form)
 
 
+@app.route('/entries/<slug>')
+def detail(slug):
+    """Show the detail page."""
+    entry = models.Entries.select().where(models.Entries.slug == slug)
+    if entry.count() == 0:
+        abort(404)  # This needs handling!
+    return render_template('detail.html', entry=entry)
+
+
 @app.route('/entries')
 @app.route('/entries/<int:id>')
-def detail(id=None):
+def detail_id(id=None):
     """Show the detail page."""
     if id:
         entry = models.Entries.select().where(models.Entries.id == id)
