@@ -40,7 +40,7 @@ class User(UserMixin, Model):
 class Entries(Model):
     """Define the Entry model."""
 
-    username = ForeignKeyField(User, related_name='entries')
+    username = ForeignKeyField(User, backref='entries')
     title = CharField(max_length=255)
     slug = CharField(max_length=255, unique=True)
     date = DateField()
@@ -57,10 +57,13 @@ class Entries(Model):
 class Tag(Model):
     """Define the Tag Model."""
 
+    # def __str__(self):
+    #     """Return the tag name."""
+    #     return self.tag
+
     # Typically a foreign key will contain the primary key
     # of the model it relates to.
-    entry = ForeignKeyField(Entries, related_name='tags')
-    tag = CharField(max_length=255)
+    tag = CharField(max_length=60, unique=True)
 
     class Meta:
         """Define the DB (and set the indexes?)."""
@@ -68,8 +71,24 @@ class Tag(Model):
         database = DATABASE
 
 
+class Tagged(Model):
+    """Set up the relationsships."""
+
+    entry = ForeignKeyField(User, backref='tags')
+    tags = ForeignKeyField(Tag, backref='posts')
+
+    class Meta:
+        """Define the DB (and set the indexes?)."""
+
+        database = DATABASE
+
+        indexes = (
+            (('entry', 'tags'), True),  # True sets index to unique
+        )
+
+
 def initalize():
     """Initialize the DB."""
     DATABASE.connect()
-    DATABASE.create_tables([User, Entries, Tag], safe=True)
+    DATABASE.create_tables([User, Entries, Tag, Tagged], safe=True)
     DATABASE.close()

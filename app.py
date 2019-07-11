@@ -108,16 +108,20 @@ def new():
     form = forms.EntryForm()  # Instantiate the form
     if form.validate_on_submit():  # Form has passed validation
         try:
-            print('tags: {}'.format(form.tags.data))
-            print('tags: {}'.format(tagger(form.tags.data)))
-            models.Entries.create(username=g.user._get_current_object(),
-                                  title=form.title.data.strip(),
-                                  slug=slugify(form.title.data),
-                                  date=form.date.data,
-                                  timeSpent=form.timeSpent.data,
-                                  whatILearned=form.whatILearned.data,
-                                  resourcesToRemember=form.
-                                  ResourcesToRemember.data)
+            # print('tags: {}'.format(form.tags.data))
+            # print('tags: {}'.format(tagger(form.tags.data)))
+            entry = models.Entries.create(username=g.user.
+                                          _get_current_object(),
+                                          title=form.title.data.strip(),
+                                          slug=slugify(form.title.data),
+                                          date=form.date.data,
+                                          timeSpent=form.timeSpent.data,
+                                          whatILearned=form.whatILearned.data,
+                                          resourcesToRemember=form.
+                                          ResourcesToRemember.data)
+            print("Entry ref---")
+            print(entry.id)
+            print("End Entry ref---")
             add_tags(form.tags.data)
             flash("Entry created successfully!", "success")
             return redirect(url_for('index'))
@@ -135,12 +139,21 @@ def add_tags(tagdata):
     """Add the tags."""
     tags = tagger(tagdata)
     for tag in tags:
-        print(tag)
-        try:
-            models.Tag.create(
-                tag=tag)
-        except models.IntegrityError:
-            pass
+        # print(tag)
+
+        models.Tag.create(tag=tag)
+        
+        print(models.Tag.get(models.Tag.tag == tag))
+        print('***')
+        # models.Tag.create(
+        #     entry=models.Entries.get(id),
+        #     tags=models.Tag.id
+        # )
+        # try:
+        #     models.Tag.create(tag=tag)
+        # except models.IntegrityError:
+        #     pass
+    
 
 
 @app.route('/entries/<slug>')
