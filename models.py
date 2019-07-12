@@ -57,9 +57,9 @@ class Entries(Model):
 class Tag(Model):
     """Define the Tag Model."""
 
-    # def __str__(self):
-    #     """Return the tag name."""
-    #     return self.tag
+    def __str__(self):
+        """Return the tag name."""
+        return self.tag
 
     # Typically a foreign key will contain the primary key
     # of the model it relates to.
@@ -71,11 +71,11 @@ class Tag(Model):
         database = DATABASE
 
 
-class Tagged(Model):
-    """Set up the relationsships."""
+class EntriesTagged(Model):
+    """Set up the relationships."""
 
-    entry = ForeignKeyField(User, backref='tags')
-    tags = ForeignKeyField(Tag, backref='posts')
+    entry_ref = ForeignKeyField(Entries, backref='entry_tag')
+    tag_ref = ForeignKeyField(Tag, backref='tag_entry')
 
     class Meta:
         """Define the DB (and set the indexes?)."""
@@ -83,12 +83,12 @@ class Tagged(Model):
         database = DATABASE
 
         indexes = (
-            (('entry', 'tags'), True),  # True sets index to unique
+            (('entry_ref', 'tag_ref'), True),  # True sets index to unique
         )
 
 
 def initalize():
     """Initialize the DB."""
     DATABASE.connect()
-    DATABASE.create_tables([User, Entries, Tag, Tagged], safe=True)
+    DATABASE.create_tables([User, Entries, Tag, EntriesTagged], safe=True)
     DATABASE.close()

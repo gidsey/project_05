@@ -52,6 +52,8 @@
                             <h2><a href="{{ url_for('detail', slug=entry.slug) }}">{{ entry.title }}</a></h2>
                              <time datetime="{{ entry.date }}">{{ entry.date.strftime('%B %d, %Y') }}</time>
                              <p class="author">by {{ entry.username.username }}</p>
+                             <p class="author">entry id {{ entry.id }}</p>
+                             <p class="author">Tags: {{ entries_with_tags }}</p>
                            </article>
 
                         {% endfor %}

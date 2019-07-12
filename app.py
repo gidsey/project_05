@@ -47,13 +47,33 @@ def after_request(response):
     return response
 
 
+def tagger(taglist):
+    """Return set from comma sepatared string, with duplicates removed."""
+    tags = taglist.replace(' ', '')
+    return set(tags.split(','))
+
+
 @app.route('/', methods=('GET', 'POST'))
 def index():
     """Define the index view."""
     entries = models.Entries.select().order_by(models.Entries.date.desc(),
                                                models.Entries.id.desc())
 
-    return render_template('index.html', entries=entries)
+    entries_with_tags = []
+    for entry in entries:
+        entry_tags = (
+            models.Tag.select()
+            .join(models.EntriesTagged)
+            .join(models.Entries)
+            .where(models.Entries.id == entry.id)
+        )
+        
+        for et in entry_tags:
+            print(et.tag)
+            entries_with_tags.append([entry.id, et.tag])
+
+    return render_template('index.html', entries=entries,
+                           entries_with_tags=entries_with_tags)
 
 
 @app.route('/register', methods=('GET', 'POST'))
@@ -131,7 +151,7 @@ def new():
     return render_template('new.html', form=form)
 
 
-def add_tags(tagdata, entryid):
+def add_tags(tagdata, current_entry_id):
     """Add the tags."""
     tags = tagger(tagdata)
     for tag in tags:
@@ -142,10 +162,9 @@ def add_tags(tagdata, entryid):
             current_tag = models.Tag.get(tag=tag)
             current_tag_id = current_tag.id
 
-        current_entry_id = entryid
-        # insert into taggeed here
-        print('current_entry_id = {}'.format(current_entry_id))
-        print('current_tag_id = {}'.format(current_tag_id))
+        models.EntriesTagged.create(entry_ref=current_entry_id,
+                                    tag_ref=current_tag_id
+                                    )
 
 
 @app.route('/entries/<slug>')
@@ -165,7 +184,7 @@ def detail_id(id=None):
     if id:
         entry = models.Entries.select().where(models.Entries.id == id)
         if entry.count() == 0:
-            abort(404)  # This needs handling!
+            abort(404)
         return render_template('detail.html', entry=entry)
     else:
         entries = models.Entries.select().order_by(models.Entries.date.desc(),
@@ -226,12 +245,6 @@ def delete(id):
 def not_found(error):
     """Handle the 404 error view."""
     return render_template('404.html'), 404
-
-
-def tagger(taglist):
-    """Return set from comma sepatared string, with duplicates removed."""
-    tags = taglist.replace(' ', '')
-    return set(tags.split(','))
 
 
 if __name__ == '__main__':
