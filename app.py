@@ -179,20 +179,25 @@ def detail_id(id=None):
         return render_template('index.html', entries=entries)
 
 
-@app.route('/entries/tag/<int:tag>')
-@app.route('/entries/tag/<int:tag>/')
+@app.route('/entries/tag/<tag>')
+@app.route('/entries/tag/<tag>/')
 def all_tagged(tag):
     """Show all entries tagged with X."""
+    try:
+        tagid = models.Tag.get(models.Tag.tag == tag)
+    except models.DoesNotExist:
+        abort(404)
+
     entries = (models.Entries.select()
                .join(models.EntriesTagged)
                .join(models.Tag)
-               .where(models.EntriesTagged.tag_ref == tag)
+               .where(models.EntriesTagged.tag_ref == tagid)
                .order_by(models.Entries.date.desc(), models.Entries.id.desc())
                )
 
     if entries.count() == 0:
         abort(404)
-    return render_template('tags.html', entries=entries)
+    return render_template('tags.html', entries=entries, tag=tag)
 
 
 @app.route('/entries/<int:id>/edit', methods=('GET', 'POST'))

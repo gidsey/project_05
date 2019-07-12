@@ -63,16 +63,6 @@ class Entries(Model):
             )
         )
 
-    # def tagged_entries(tagid):
-    #     """Return all entries with the same tag."""
-    #     return (
-    #         Entries.select.join(
-    #             EntriesTagged, on=EntriesTagged.entry_ref
-    #         ).where(
-    #             EntriesTagged.tag_ref == tagid
-    #         )
-    #     )
-
 
 class Tag(Model):
     """Define the Tag Model."""

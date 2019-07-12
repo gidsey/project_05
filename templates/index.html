@@ -53,7 +53,7 @@
                              <time datetime="{{ entry.date }}">{{ entry.date.strftime('%B %d, %Y') }}</time>
                              <p class="author">by {{ entry.username.username }}</p>
                              {% for tag in entry.tags() %}
-                             <a href="#" class="tag">{{ tag }}</a>
+                             <a href="{{ url_for('all_tagged', tag=tag) }}" class="tag">{{ tag }}</a>
                              {% endfor %}
                            </article>
 
