@@ -63,6 +63,16 @@ class Entries(Model):
             )
         )
 
+    # def tagged_entries(tagid):
+    #     """Return all entries with the same tag."""
+    #     return (
+    #         Entries.select.join(
+    #             EntriesTagged, on=EntriesTagged.entry_ref
+    #         ).where(
+    #             EntriesTagged.tag_ref == tagid
+    #         )
+    #     )
+
 
 class Tag(Model):
     """Define the Tag Model."""
@@ -71,8 +81,6 @@ class Tag(Model):
         """Return the tag name."""
         return self.tag
 
-    # Typically a foreign key will contain the primary key
-    # of the model it relates to.
     tag = CharField(max_length=60, unique=True)
 
     class Meta:

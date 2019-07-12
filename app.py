@@ -59,20 +59,6 @@ def index():
     entries = models.Entries.select().order_by(models.Entries.date.desc(),
                                                models.Entries.id.desc())
 
-    # entries_with_tags = []
-    # for entry in entries:
-    #     entry_tags = (
-    #         models.Tag.select()
-    #         .join(models.EntriesTagged)
-    #         .join(models.Entries)
-    #         .where(models.Entries.id == entry.id)
-    #     )
-    #     for tag in entry_tags:
-    #         print(tag.tag)
-    #         entries_with_tags.append({entry.id: tag.tag})
-
-    # entries6 = [d[6] for d in entries_with_tags if 6 in d]
-
     return render_template('index.html', entries=entries)
 
 
@@ -176,11 +162,12 @@ def detail(slug):
     return render_template('detail.html', entry=entry)
 
 
-@app.route('/entries/')
 @app.route('/entries')
+@app.route('/entries/')
 @app.route('/entries/<int:id>')
+@app.route('/entries/<int:id>/')
 def detail_id(id=None):
-    """Show the detail page via id."""
+    """Show the detail page via id or tag."""
     if id:
         entry = models.Entries.select().where(models.Entries.id == id)
         if entry.count() == 0:
@@ -190,6 +177,22 @@ def detail_id(id=None):
         entries = models.Entries.select().order_by(models.Entries.date.desc(),
                                                    models.Entries.id.desc())
         return render_template('index.html', entries=entries)
+
+
+@app.route('/entries/tag/<int:tag>')
+@app.route('/entries/tag/<int:tag>/')
+def all_tagged(tag):
+    """Show all entries tagged with X."""
+    entries = (models.Entries.select()
+               .join(models.EntriesTagged)
+               .join(models.Tag)
+               .where(models.EntriesTagged.tag_ref == tag)
+               .order_by(models.Entries.date.desc(), models.Entries.id.desc())
+               )
+
+    if entries.count() == 0:
+        abort(404)
+    return render_template('tags.html', entries=entries)
 
 
 @app.route('/entries/<int:id>/edit', methods=('GET', 'POST'))
