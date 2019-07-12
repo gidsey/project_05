@@ -119,10 +119,8 @@ def new():
                                           whatILearned=form.whatILearned.data,
                                           resourcesToRemember=form.
                                           ResourcesToRemember.data)
-            print("Entry ref---")
-            print(entry.id)
-            print("End Entry ref---")
-            add_tags(form.tags.data)
+
+            add_tags(form.tags.data, entry.id)
             flash("Entry created successfully!", "success")
             return redirect(url_for('index'))
         except models.IntegrityError:
@@ -135,16 +133,20 @@ def new():
     return render_template('new.html', form=form)
 
 
-def add_tags(tagdata):
+def add_tags(tagdata, entryid):
     """Add the tags."""
     tags = tagger(tagdata)
     for tag in tags:
-        # print(tag)
 
-        models.Tag.create(tag=tag)
-        
-        print(models.Tag.get(models.Tag.tag == tag))
-        print('***')
+        current_tag = models.Tag.create(tag=tag)
+
+        current_entry_id = entryid
+        # current_tag_id = models.Tag.get(models.Tag.tag == tag)
+        current_tag_id = current_tag.id
+
+        print('current_entry_id = {}'.format(current_entry_id))
+        print('current_tag_id = {}'.format(current_tag_id))
+        # print('***')
         # models.Tag.create(
         #     entry=models.Entries.get(id),
         #     tags=models.Tag.id
@@ -153,7 +155,6 @@ def add_tags(tagdata):
         #     models.Tag.create(tag=tag)
         # except models.IntegrityError:
         #     pass
-    
 
 
 @app.route('/entries/<slug>')
