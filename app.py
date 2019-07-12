@@ -137,24 +137,17 @@ def add_tags(tagdata, entryid):
     """Add the tags."""
     tags = tagger(tagdata)
     for tag in tags:
-
-        current_tag = models.Tag.create(tag=tag)
+        try:  # write the tag to the DB and get its id
+            current_tag = models.Tag.create(tag=tag)
+            current_tag_id = current_tag.id
+        except models.IntegrityError:  # unless already exits, get existing id
+            current_tag = models.Tag.get(tag=tag)
+            current_tag_id = current_tag.id
 
         current_entry_id = entryid
-        # current_tag_id = models.Tag.get(models.Tag.tag == tag)
-        current_tag_id = current_tag.id
-
+        # insert into taggeed here
         print('current_entry_id = {}'.format(current_entry_id))
         print('current_tag_id = {}'.format(current_tag_id))
-        # print('***')
-        # models.Tag.create(
-        #     entry=models.Entries.get(id),
-        #     tags=models.Tag.id
-        # )
-        # try:
-        #     models.Tag.create(tag=tag)
-        # except models.IntegrityError:
-        #     pass
 
 
 @app.route('/entries/<slug>')
