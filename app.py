@@ -105,11 +105,9 @@ def logout():
 @login_required
 def new():
     """Define new entry view."""
-    form = forms.EntryForm()  # Instantiate the form
-    if form.validate_on_submit():  # Form has passed validation
+    form = forms.EntryForm()
+    if form.validate_on_submit():
         try:
-            # print('tags: {}'.format(form.tags.data))
-            # print('tags: {}'.format(tagger(form.tags.data)))
             entry = models.Entries.create(username=g.user.
                                           _get_current_object(),
                                           title=form.title.data.strip(),
@@ -119,8 +117,8 @@ def new():
                                           whatILearned=form.whatILearned.data,
                                           resourcesToRemember=form.
                                           ResourcesToRemember.data)
-
-            add_tags(form.tags.data, entry.id)
+            if form.tags.data:  # add the tags (if entered)
+                add_tags(form.tags.data, entry.id)
             flash("Entry created successfully!", "success")
             return redirect(url_for('index'))
         except models.IntegrityError:
