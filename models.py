@@ -53,6 +53,16 @@ class Entries(Model):
 
         database = DATABASE
 
+    def tags(self):
+        """Get tags assoaciated with the current entry."""
+        return (
+            Tag.select().join(
+                EntriesTagged, on=EntriesTagged.tag_ref
+            ).where(
+                EntriesTagged.entry_ref == self
+            )
+        )
+
 
 class Tag(Model):
     """Define the Tag Model."""

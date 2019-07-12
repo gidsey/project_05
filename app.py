@@ -59,21 +59,21 @@ def index():
     entries = models.Entries.select().order_by(models.Entries.date.desc(),
                                                models.Entries.id.desc())
 
-    entries_with_tags = []
-    for entry in entries:
-        entry_tags = (
-            models.Tag.select()
-            .join(models.EntriesTagged)
-            .join(models.Entries)
-            .where(models.Entries.id == entry.id)
-        )
-        
-        for et in entry_tags:
-            print(et.tag)
-            entries_with_tags.append([entry.id, et.tag])
+    # entries_with_tags = []
+    # for entry in entries:
+    #     entry_tags = (
+    #         models.Tag.select()
+    #         .join(models.EntriesTagged)
+    #         .join(models.Entries)
+    #         .where(models.Entries.id == entry.id)
+    #     )
+    #     for tag in entry_tags:
+    #         print(tag.tag)
+    #         entries_with_tags.append({entry.id: tag.tag})
 
-    return render_template('index.html', entries=entries,
-                           entries_with_tags=entries_with_tags)
+    # entries6 = [d[6] for d in entries_with_tags if 6 in d]
+
+    return render_template('index.html', entries=entries)
 
 
 @app.route('/register', methods=('GET', 'POST'))
