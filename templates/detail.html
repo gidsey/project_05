@@ -67,6 +67,13 @@
                                 <li><a href="">Ipsum dolor sit amet</a></li>
                             </ul> -->
                         </div>
+                        <div class="entry">
+                            <h3>Tags:</h3>
+                            <br>
+                        {% for tag in item.tags() %}
+                             <a href="{{ url_for('all_tagged', tag=tag) }}" class="tag">{{ tag }}</a>
+                        {% endfor %}
+                    </div>
                     </article>
                 </div>
             </div>
