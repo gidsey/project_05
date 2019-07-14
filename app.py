@@ -232,14 +232,27 @@ def edit(id):
 @login_required
 def delete(id):
     """Delete the entry."""
+
     try:
         record = models.Entries.get(models.Entries.id == id)
         user = g.user._get_current_object()
         author = record.username
+        # Get refernces to the tags from this entry
+        tagrefs = (models.EntriesTagged.select()
+                   .where(models.EntriesTagged.entry_ref == id))
         print('user: {}'.format(user))
         print('author: {}'.format(author))
+
         if user == author:
+            print('user: {}'.format(user))
+            print('author: {}'.format(author))
             record.delete_instance()
+            for tagref in tagrefs:
+                print('tagref: {}'.format(tagref))
+                tagrecord = (models.EntriesTagged
+                             .get(models.EntriesTagged.id == tagref))
+                tagrecord.delete_instance()
+
             flash("Entry deleted successfully!", "success")
         else:
             flash("Entry can only be deleted by its author", "error")
