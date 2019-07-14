@@ -57,9 +57,15 @@
                                 <textarea id="what-i-learned" rows="5" name="whatILearned">{{ item.whatILearned }}</textarea>
                                 <label for="resources-to-remember">Resources to Remember</label>
                                 <textarea id="resources-to-remember" rows="5" name="ResourcesToRemember">{{ item.resourcesToRemember }}</textarea>
+                                <label for="tags">Tags (uncheck to remove)</label>
+                                {% for tag in item.tags() %}
+                                <p><input type="checkbox" name="existing-tag" checked value="{{ tag }}"> {{ tag }}</p>
+                                {% endfor %}
+                                <br>
+                                <label for="tags">Enter new tags (optional) separate with commas</label>
+                                <textarea id="tags" rows="5" name="tags"></textarea>
                                 <input type="submit" value="Update" class="button">
                                 <a href="#" class="button button-secondary">Cancel</a>
-
                             </form>
                         {% else %}
                         <p>Forbidden. Entries can only be edited by thier author.</p>
