@@ -60,7 +60,7 @@ class Entries(Model):
                 EntriesTagged, on=EntriesTagged.tag_ref
             ).where(
                 EntriesTagged.entry_ref == self
-            )
+            ).order_by(Tag.tag)
         )
 
 

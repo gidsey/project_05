@@ -47,10 +47,17 @@ def after_request(response):
     return response
 
 
-def tagger(taglist):
-    """Return set from comma sepatared string, with duplicates removed."""
-    tags = taglist.replace(' ', '')
-    return set(tags.split(','))
+def empty(item):
+    """Filter out empty items from a set."""
+    return item != ''
+
+
+def tagger(tagstring):
+    """Return ordered list from comma sepatared string."""
+    """With duplicates and empty items removed."""
+    tags = tagstring.replace(' ', '')
+    tags = tags.split(',')
+    return set(filter(empty, tags))
 
 
 @app.route('/', methods=('GET', 'POST'))
