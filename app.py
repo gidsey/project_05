@@ -55,7 +55,7 @@ def empty(item):
 def tagger(tagstring):
     """Return ordered list from comma sepatared string."""
     """With duplicates and empty items removed."""
-    tags = tagstring.replace(' ', '')
+    tags = tagstring.replace(' ', '').lower()
     tags = tags.split(',')
     return set(filter(empty, tags))
 
