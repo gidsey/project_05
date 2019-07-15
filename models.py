@@ -42,7 +42,7 @@ class Entries(Model):
 
     username = ForeignKeyField(User, backref='entries')
     title = CharField(max_length=255)
-    slug = CharField(max_length=255, unique=True)
+    slug = CharField(max_length=255)
     date = DateField()
     timeSpent = IntegerField()
     whatILearned = TextField()

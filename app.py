@@ -120,22 +120,46 @@ def new():
     """Define new entry view."""
     form = forms.EntryForm()
     if form.validate_on_submit():
-        try:
-            entry = models.Entries.create(username=g.user.
-                                          _get_current_object(),
-                                          title=form.title.data.strip(),
-                                          slug=slugify(form.title.data),
-                                          date=form.date.data,
-                                          timeSpent=form.timeSpent.data,
-                                          whatILearned=form.whatILearned.data,
-                                          resourcesToRemember=form.
-                                          ResourcesToRemember.data)
-            if form.tags.data:  # add the tags (if entered)
-                add_tags(form.tags.data, entry.id)
-            flash("Entry created successfully!", "success")
-            return redirect(url_for('index'))
-        except models.IntegrityError:
-            flash("Title already exits. Please choose another.", "error")
+        slug = slugify(form.title.data)
+        n = 1
+
+        slugtaken = models.Entries.select().where(models.Entries.slug**slug)
+        while slugtaken:
+            slug = slugify(form.title.data) + '-' + str(n)
+            n += 1
+            slugtaken = (models.Entries.select()
+                         .where(models.Entries.slug**slug))
+
+        entry = models.Entries.create(username=g.user.
+                                      _get_current_object(),
+                                      title=form.title.data.strip(),
+                                      slug=slug,
+                                      date=form.date.data,
+                                      timeSpent=form.timeSpent.data,
+                                      whatILearned=form.whatILearned.data,
+                                      resourcesToRemember=form.
+                                      ResourcesToRemember.data)
+        if form.tags.data:  # add the tags (if entered)
+            add_tags(form.tags.data, entry.id)
+        flash("Entry created successfully!", "success")
+        return redirect(url_for('index'))
+
+        #     try:
+        #     entry = models.Entries.create(username=g.user.
+        #                                   _get_current_object(),
+        #                                   title=form.title.data.strip(),
+        #                                   slug=slugify(form.title.data),
+        #                                   date=form.date.data,
+        #                                   timeSpent=form.timeSpent.data,
+        #                                   whatILearned=form.whatILearned.data,
+        #                                   resourcesToRemember=form.
+        #                                   ResourcesToRemember.data)
+        #     if form.tags.data:  # add the tags (if entered)
+        #         add_tags(form.tags.data, entry.id)
+        #     flash("Entry created successfully!", "success")
+        #     return redirect(url_for('index'))
+        # except models.IntegrityError:
+        #     flash("Title already exits. Please choose another.", "error")
 
     for field, errors in form.errors.items():
         for error in errors:
