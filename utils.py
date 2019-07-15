@@ -28,3 +28,19 @@ def tagger(tagstring):
     tags = tagstring.replace(' ', '').lower()
     tags = tags.split(',')
     return set(filter(empty, tags))
+
+
+def add_tags(tagdata, current_entry_id):
+    """Add the tags."""
+    tags = tagger(tagdata)
+    for tag in tags:
+        try:  # write the tag to the DB and get its id
+            current_tag = models.Tag.create(tag=tag)
+            current_tag_id = current_tag.id
+        except models.IntegrityError:  # unless already exits, get existing id
+            current_tag = models.Tag.get(tag=tag)
+            current_tag_id = current_tag.id
+
+        models.EntriesTagged.create(entry_ref=current_entry_id,
+                                    tag_ref=current_tag_id
+                                    )

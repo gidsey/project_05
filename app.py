@@ -117,7 +117,7 @@ def new():
                                       resourcesToRemember=form.
                                       ResourcesToRemember.data)
         if form.tags.data:  # add the tags (if entered)
-            add_tags(form.tags.data, entry.id)
+            utils.add_tags(form.tags.data, entry.id)
         flash("Entry created successfully!", "success")
         return redirect(url_for('index'))
 
@@ -143,22 +143,6 @@ def new():
             flash(error, "error")
 
     return render_template('new.html', form=form)
-
-
-def add_tags(tagdata, current_entry_id):
-    """Add the tags."""
-    tags = utils.tagger(tagdata)
-    for tag in tags:
-        try:  # write the tag to the DB and get its id
-            current_tag = models.Tag.create(tag=tag)
-            current_tag_id = current_tag.id
-        except models.IntegrityError:  # unless already exits, get existing id
-            current_tag = models.Tag.get(tag=tag)
-            current_tag_id = current_tag.id
-
-        models.EntriesTagged.create(entry_ref=current_entry_id,
-                                    tag_ref=current_tag_id
-                                    )
 
 
 @app.route('/entries/<slug>')
@@ -229,7 +213,6 @@ def edit(id):
             tags_in_db = {tag.tag for tag in models.Entries.tags(id)}
             tags_to_delete = tags_in_db - new_tags
 
-
             print('tags_in_db: {}'.format(tags_in_db))
             print('new_tags: {}'.format(new_tags))
             print('tags_to_delete: {}'.format(tags_to_delete))
@@ -238,13 +221,12 @@ def edit(id):
                 tagref = (models.Tag.select()
                           .where(models.Tag.tag == tag_to_delete))
                 for tag in tagref:
-                    print('tagid: {}'.format(tag.id))
                     tagrecord = (models.EntriesTagged
-                                 .get(models.EntriesTagged.entry_ref == id and models.EntriesTagged.tag_ref == tag.id))
+                                 .get(models.EntriesTagged
+                                            .entry_ref == id and models
+                                            .EntriesTagged.tag_ref == tag.id))
 
                     tagrecord.delete_instance()
-
-
 
             flash("Entry edited successfully!", "success")
             return redirect(url_for('index'))
