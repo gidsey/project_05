@@ -213,7 +213,6 @@ def edit(id):
     """Edit the entry."""
     form = forms.EditForm()
     entry = models.Entries.select().where(models.Entries.id == id)
-
     if form.validate_on_submit():  # Form has passed validation
         try:
             record = models.Entries.get(models.Entries.id == id)
@@ -224,6 +223,8 @@ def edit(id):
             record.whatILearned = form.whatILearned.data
             record.resourcesToRemember = form.ResourcesToRemember.data
             record.save()
+            if form.tags.data:  # add the tags (if entered)
+                add_tags(form.tags.data, id)
             flash("Entry edited successfully!", "success")
             return redirect(url_for('index'))
         except models.IntegrityError:

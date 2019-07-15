@@ -3,7 +3,7 @@
 # from flask_wtf import Form
 from flask_wtf import FlaskForm
 from wtforms import (StringField, PasswordField, DateField,
-                     IntegerField, TextField)
+                     IntegerField, TextField, SelectMultipleField)
 from wtforms.validators import (DataRequired, Regexp, Email, ValidationError,
                                 Length, EqualTo)
 from models import User
@@ -116,3 +116,5 @@ class EditForm(FlaskForm):
         'Resources to Remember',
         validators=[DataRequired(message="'Resources to Remember' "
                                          "is a required field.")])
+
+    tags = TextField('tags')
