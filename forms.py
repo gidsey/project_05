@@ -3,7 +3,7 @@
 # from flask_wtf import Form
 from flask_wtf import FlaskForm
 from wtforms import (StringField, PasswordField, DateField,
-                     IntegerField, TextField, SelectMultipleField)
+                     IntegerField, TextField)
 from wtforms.validators import (DataRequired, Regexp, Email, ValidationError,
                                 Length, EqualTo)
 from models import User

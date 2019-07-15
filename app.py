@@ -6,10 +6,9 @@ from flask_login import (LoginManager, login_user, current_user,
                          login_required, logout_user)
 from flask_bcrypt import check_password_hash
 
-from slugify import slugify
-
 import models
 import forms
+import utils
 
 DEBUG = True
 PORT = 5000
@@ -45,19 +44,6 @@ def after_request(response):
     """Close the DB connection after each request."""
     g.db.close()
     return response
-
-
-def empty(item):
-    """Filter out empty items from a set."""
-    return item != ''
-
-
-def tagger(tagstring):
-    """Return ordered list from comma sepatared string."""
-    """With duplicates and empty items removed."""
-    tags = tagstring.replace(' ', '').lower()
-    tags = tags.split(',')
-    return set(filter(empty, tags))
 
 
 @app.route('/', methods=('GET', 'POST'))
@@ -120,16 +106,7 @@ def new():
     """Define new entry view."""
     form = forms.EntryForm()
     if form.validate_on_submit():
-        slug = slugify(form.title.data)
-        n = 1
-
-        slugtaken = models.Entries.select().where(models.Entries.slug**slug)
-        while slugtaken:
-            slug = slugify(form.title.data) + '-' + str(n)
-            n += 1
-            slugtaken = (models.Entries.select()
-                         .where(models.Entries.slug**slug))
-
+        slug = utils.slugcheck(form)
         entry = models.Entries.create(username=g.user.
                                       _get_current_object(),
                                       title=form.title.data.strip(),
@@ -170,7 +147,7 @@ def new():
 
 def add_tags(tagdata, current_entry_id):
     """Add the tags."""
-    tags = tagger(tagdata)
+    tags = utils.tagger(tagdata)
     for tag in tags:
         try:  # write the tag to the DB and get its id
             current_tag = models.Tag.create(tag=tag)
@@ -241,14 +218,33 @@ def edit(id):
         try:
             record = models.Entries.get(models.Entries.id == id)
             record.title = form.title.data.strip()
-            record.slug = slugify(form.title.data)
+            record.slug = utils.slugcheck(form)
             record.date = form.date.data
             record.timeSpent = form.timeSpent.data
             record.whatILearned = form.whatILearned.data
             record.resourcesToRemember = form.ResourcesToRemember.data
             record.save()
-            if form.tags.data:  # add the tags (if entered)
-                add_tags(form.tags.data, id)
+            # process the tags
+            new_tags = utils.tagger(form.tags.data)
+            tags_in_db = {tag.tag for tag in models.Entries.tags(id)}
+            tags_to_delete = tags_in_db - new_tags
+
+
+            print('tags_in_db: {}'.format(tags_in_db))
+            print('new_tags: {}'.format(new_tags))
+            print('tags_to_delete: {}'.format(tags_to_delete))
+
+            for tag_to_delete in tags_to_delete:
+                tagref = (models.Tag.select()
+                          .where(models.Tag.tag == tag_to_delete))
+                for tag in tagref:
+                    print('tagid: {}'.format(tag.id))
+
+
+
+
+
+
             flash("Entry edited successfully!", "success")
             return redirect(url_for('index'))
         except models.IntegrityError:
