@@ -239,9 +239,10 @@ def edit(id):
                           .where(models.Tag.tag == tag_to_delete))
                 for tag in tagref:
                     print('tagid: {}'.format(tag.id))
+                    tagrecord = (models.EntriesTagged
+                                 .get(models.EntriesTagged.entry_ref == id and models.EntriesTagged.tag_ref == tag.id))
 
-
-
+                    tagrecord.delete_instance()
 
 
 
