@@ -25,15 +25,16 @@ def empty(item):
 def tagger(tagstring):
     """Return ordered list from comma sepatared string."""
     """With duplicates and empty items removed."""
-    tags = tagstring.replace(' ', '').lower()
+    tags = tagstring.replace(' ', '').lower().strip()
     tags = tags.split(',')
+    print(tags)
     return set(filter(empty, tags))
 
 
 def add_tags(tagdata, current_entry_id):
     """Add the tags."""
-    tags = tagger(tagdata)
-    for tag in tags:
+    # tags = tagger(tagdata)
+    for tag in tagdata:
         try:  # write the tag to the DB and get its id
             current_tag = models.Tag.create(tag=tag)
             current_tag_id = current_tag.id

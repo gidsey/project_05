@@ -107,41 +107,26 @@ def new():
     form = forms.EntryForm()
     if form.validate_on_submit():
         slug = utils.slugcheck(form)
-        entry = models.Entries.create(username=g.user.
-                                      _get_current_object(),
-                                      title=form.title.data.strip(),
-                                      slug=slug,
-                                      date=form.date.data,
-                                      timeSpent=form.timeSpent.data,
-                                      whatILearned=form.whatILearned.data,
-                                      resourcesToRemember=form.
-                                      ResourcesToRemember.data)
-        if form.tags.data:  # add the tags (if entered)
-            utils.add_tags(form.tags.data, entry.id)
-        flash("Entry created successfully!", "success")
+        try:
+            entry = models.Entries.create(username=g.user.
+                                          _get_current_object(),
+                                          title=form.title.data.strip(),
+                                          slug=slug,
+                                          date=form.date.data,
+                                          timeSpent=form.timeSpent.data,
+                                          whatILearned=form.whatILearned.data,
+                                          resourcesToRemember=form.
+                                          ResourcesToRemember.data)
+            if form.tags.data:  # add the tags (if entered)
+                tags = utils.tagger(form.tags.data)
+                utils.add_tags(tags, entry.id)
+            flash("Entry created successfully!", "success")
+        except models.IntegrityError:
+            flash("An error occured. Please try again.", "error")
         return redirect(url_for('index'))
-
-        #     try:
-        #     entry = models.Entries.create(username=g.user.
-        #                                   _get_current_object(),
-        #                                   title=form.title.data.strip(),
-        #                                   slug=slugify(form.title.data),
-        #                                   date=form.date.data,
-        #                                   timeSpent=form.timeSpent.data,
-        #                                   whatILearned=form.whatILearned.data,
-        #                                   resourcesToRemember=form.
-        #                                   ResourcesToRemember.data)
-        #     if form.tags.data:  # add the tags (if entered)
-        #         add_tags(form.tags.data, entry.id)
-        #     flash("Entry created successfully!", "success")
-        #     return redirect(url_for('index'))
-        # except models.IntegrityError:
-        #     flash("Title already exits. Please choose another.", "error")
-
     for field, errors in form.errors.items():
         for error in errors:
             flash(error, "error")
-
     return render_template('new.html', form=form)
 
 
@@ -186,7 +171,6 @@ def all_tagged(tag):
                .where(models.EntriesTagged.tag_ref == tagid)
                .order_by(models.Entries.date.desc(), models.Entries.id.desc())
                )
-
     if entries.count() == 0:
         abort(404)
     return render_template('tags.html', entries=entries, tag=tag)
@@ -198,7 +182,7 @@ def edit(id):
     """Edit the entry."""
     form = forms.EditForm()
     entry = models.Entries.select().where(models.Entries.id == id)
-    if form.validate_on_submit():  # Form has passed validation
+    if form.validate_on_submit():
         try:
             record = models.Entries.get(models.Entries.id == id)
             record.title = form.title.data.strip()
@@ -212,11 +196,9 @@ def edit(id):
             new_tags = utils.tagger(form.tags.data)
             tags_in_db = {tag.tag for tag in models.Entries.tags(id)}
             tags_to_delete = tags_in_db - new_tags
+            tags_to_add = new_tags - tags_in_db
 
-            print('tags_in_db: {}'.format(tags_in_db))
-            print('new_tags: {}'.format(new_tags))
-            print('tags_to_delete: {}'.format(tags_to_delete))
-
+            # Remove unused tag references
             for tag_to_delete in tags_to_delete:
                 tagref = (models.Tag.select()
                           .where(models.Tag.tag == tag_to_delete))
@@ -225,17 +207,16 @@ def edit(id):
                                  .get(models.EntriesTagged
                                             .entry_ref == id and models
                                             .EntriesTagged.tag_ref == tag.id))
-
                     tagrecord.delete_instance()
-
+            # Add any new tags
+            utils.add_tags(tags_to_add, id)
             flash("Entry edited successfully!", "success")
             return redirect(url_for('index'))
         except models.IntegrityError:
-            flash("Title already exits. Please choose another.", "error")
+            flash("An error occured. Please try again.", "error")
     for field, errors in form.errors.items():
         for error in errors:
             flash(error, "error")
-
     return render_template('edit.html', form=form, entry=entry)
 
 
