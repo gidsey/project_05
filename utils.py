@@ -33,7 +33,6 @@ def tagger(tagstring):
 
 def add_tags(tagdata, current_entry_id):
     """Add the tags."""
-    # tags = tagger(tagdata)
     for tag in tagdata:
         try:  # write the tag to the DB and get its id
             current_tag = models.Tag.create(tag=tag)
