@@ -25,5 +25,4 @@ Please note the following
 
 
 ### Known issues
-* Tags cannot be edited or deleted once created.
 * Tag must be a single word and cannot contain spaces.
