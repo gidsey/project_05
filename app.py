@@ -208,6 +208,7 @@ def edit(id):
                                             .entry_ref == id and models
                                             .EntriesTagged.tag_ref == tag.id))
                     tagrecord.delete_instance()
+
             # Add any new tags
             utils.add_tags(tags_to_add, id)
             flash("Entry edited successfully!", "success")
