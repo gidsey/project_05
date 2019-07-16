@@ -11,6 +11,8 @@ This project has been built using a Pyton Virtualenv and the dependencies for th
 
 To run the app, launch 'app.py' in the shell and access the site at http://127.0.0.1:5000/ in your browser.
 
+Please note that Debug mode is enabled.
+
 Please note the following
 * Anonymous users can view all entries.
 * Users need to be logged in order to post a new entry.
