@@ -25,7 +25,7 @@ class RegisterForm(FlaskForm):
     """User registration form."""
 
     username = StringField(
-        'Username',  # Form label
+        'Username',
         validators=[
             DataRequired(),
             Regexp(
@@ -36,21 +36,21 @@ class RegisterForm(FlaskForm):
             name_exists
         ])
     email = StringField(
-        'Email',  # Form label
+        'Email',
         validators=[
             DataRequired(),
             Email(),
             email_exists
         ])
     password = PasswordField(
-        'Password',  # Form label
+        'Password (min 6 charatcters)',
         validators=[
             DataRequired(),
-            Length(min=2),
+            Length(min=6),
             EqualTo('password2', message='Passwords must match.')
         ])
     password2 = PasswordField(
-        'Confirm Password',  # Form label
+        'Confirm Password',
         validators=[DataRequired()]
     )
 
@@ -66,7 +66,7 @@ class EntryForm(FlaskForm):
     """New Entry Form."""
 
     title = StringField(
-        'Title',  # Form label
+        'Title',
         validators=[
             DataRequired(message="'Title' is a required field.")])
 
@@ -95,7 +95,7 @@ class EditForm(FlaskForm):
     """Edit Entry Form."""
 
     title = StringField(
-        'Title',  # Form label
+        'Title',
         validators=[
             DataRequired(message="'Title' is a required field.")])
 
