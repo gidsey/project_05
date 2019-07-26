@@ -7,7 +7,7 @@ A personal journal application that allows users to create an account, login and
 
 
 ### Installation and use
-This project has been built using a Pyton Virtualenv and the dependencies for this are set out in the requirements.txt file included in this repo.
+This project has been built using a Python Virtualenv and the dependencies for this are set out in the requirements.txt file included in this repo.
 
 To run the app, launch 'app.py' in the shell and access the site at http://127.0.0.1:5000/ in your browser.
 
